@@ -2,19 +2,19 @@ import signal
 import socket
 import sys
 
-USE_UDP = 1
+USE_UDP = 0
 
 def main():
 	recvbyte = 0
 
-	# Set signal handler for printing nrecvdata.
+	# Set signal handler for printing recvbyte.
 	signal.signal(signal.SIGINT, lambda signum, frame: print(recvbyte))
 
 	# Set signal handler for clearing recvbyte.
-	def clear_recvdata_byte(signum, frame):
+	def clear_recvbyte(signum, frame):
 		nonlocal recvbyte
 		recvbyte = 0
-	signal.signal(signal.SIGTSTP, clear_recvdata_byte)
+	signal.signal(signal.SIGTSTP, clear_recvbyte)
 
 	ADDR_PORT = ('', int(sys.argv[1]))	# (INADDR_ANY, port)
 
@@ -29,12 +29,10 @@ def main():
 
 	while True:
 		if USE_UDP:
-			# recvdata = sock_srv.recv(1472)
-			recvdata, addrport = sock_srv.recvfrom(1472)
+			recvdata = sock_srv.recv(1472)
 		else:
 			recvdata = sock_cli.recv(1460)
 		recvbyte += len(recvdata)
-		print(addrport)
 
 if __name__ == '__main__':
 	main()
