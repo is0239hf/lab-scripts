@@ -2,7 +2,7 @@ import signal
 import socket
 import sys
 
-USE_UDP = 0
+USE_UDP = 1
 
 def main():
 	recvbyte = 0
@@ -30,9 +30,11 @@ def main():
 	while True:
 		if USE_UDP:
 			recvdata = sock_srv.recv(1472)
+			# recvdata, addrport = sock_srv.recvfrom(1472)
 		else:
 			recvdata = sock_cli.recv(1460)
 		recvbyte += len(recvdata)
+		# print(addrport)
 
 if __name__ == '__main__':
 	main()
